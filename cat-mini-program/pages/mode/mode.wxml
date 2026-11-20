@@ -1,0 +1,12 @@
+<view class="mode-page">
+  <view class="mode-head"><view class="back" bindtap="onBack">‹</view><text class="mode-title">猫咪模式</text></view>
+  <view class="mode-content">
+    <view class="intro-title">选择你家猫咪的性格</view>
+    <view class="intro-copy">我们会为你推荐更合适的运动方式</view>
+    <view wx:for="{{modes}}" wx:key="id" class="mode-card {{selected === item.id ? 'mode-selected' : ''}}" data-item="{{item}}" bindtap="choose">
+      <view class="cat-avatar"><image src="{{item.image}}" mode="aspectFit" /></view>
+      <view class="mode-text"><text class="mode-name">{{item.name}}</text><text class="mode-desc">{{item.desc}}</text></view>
+      <text wx:if="{{selected === item.id}}" class="mode-check">✓</text>
+    </view>
+  </view>
+</view>

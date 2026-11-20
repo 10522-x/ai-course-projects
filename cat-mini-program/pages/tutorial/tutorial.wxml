@@ -1,0 +1,9 @@
+<view class="tutorial-page">
+  <view class="tutorial-head"><view class="back" bindtap="onBack">‹</view><text>互动玩法</text><view class="head-space"></view></view>
+  <view class="tutorial-content">
+    <view class="demo-card"><image class="tutorial-art" src="/assets/art/optimized/tutorial-touch.webp" mode="aspectFit" /></view>
+    <text class="tutorial-copy">{{step === 0 ? '点击屏幕，玩具会快速跑过去' : step === 1 ? '长按屏幕，让玩具持续躲避手指' : '换一个玩具，继续和猫咪玩吧～'}}</text>
+    <view class="dots"><i class="{{step === 0 ? 'active' : ''}}"></i><i class="{{step === 1 ? 'active' : ''}}"></i><i class="{{step === 2 ? 'active' : ''}}"></i><i></i></view>
+    <button bindtap="next">知道了</button>
+  </view>
+</view>

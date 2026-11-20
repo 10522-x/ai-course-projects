@@ -1,0 +1,8 @@
+<view class="background-page">
+  <view class="bg-head"><view class="back" bindtap="onBack">‹</view><text>背景选择</text><view class="head-space"></view></view>
+  <view class="background-content">
+    <view class="choices"><view wx:for="{{options}}" wx:key="id" class="choice" data-item="{{item}}" bindtap="choose"><view class="choice-preview {{item.className}} {{selected === item.id ? 'choice-selected' : ''}}">{{item.preview}}<view wx:if="{{selected === item.id}}" class="check">✓</view></view><text>{{item.name}}</text></view></view>
+    <view class="demo {{options[selected === 'plain' ? 0 : selected === 'sky' ? 1 : selected === 'grass' ? 2 : 3].className}}"><image class="demo-pounce" src="/assets/art/optimized/cat-pounce.webp" mode="aspectFit" /><text class="demo-copy">太棒了！<br/>又抓到啦～</text></view>
+    <button class="again" bindtap="choose" data-item="{{options[0]}}">再来一次</button>
+  </view>
+</view>

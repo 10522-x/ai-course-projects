@@ -1,0 +1,148 @@
+/* =========================================================================
+   base.css · 重置、基础排版、可访问性基线
+   ========================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--t-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 背景：两团极淡的色雾，只用品牌绿与信号橙，不引入新色 */
+  background-image:
+    radial-gradient(1100px 520px at 8% -12%, color-mix(in srgb, var(--brand) 13%, transparent) 0%, transparent 62%),
+    radial-gradient(760px 380px at 96% -6%, color-mix(in srgb, var(--ref) 10%, transparent) 0%, transparent 58%);
+  background-attachment: fixed;
+}
+
+/* 首屏之前先隐藏视图，避免未路由时闪一下空壳 */
+body:not(.app-ready) .view { visibility: hidden; }
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-tight);
+}
+
+p { margin: 0; }
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+a:hover { text-decoration: underline; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button { cursor: pointer; }
+
+canvas { display: block; }
+
+/* hidden 属性必须能压住组件自身的 display（.btn 是 inline-flex，否则隐藏不掉） */
+[hidden] { display: none !important; }
+
+ul, ol { margin: 0; padding: 0; }
+
+img, svg { display: block; max-width: 100%; }
+
+/* ---------- 图标基线 ---------- */
+/* 图标来自 Lucide（24 格网格、2px 描边、圆头圆角），所以描边宽度就取 2，
+   跟图标本身的设计一致。颜色用 currentColor，跟着文字走。 */
+.ico {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -.19em;
+}
+.ico-lg { width: 1.55em; height: 1.55em; }
+.ico-xl { width: 2.1em; height: 2.1em; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- 焦点：键盘可见、鼠标不打扰 ---------- */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--r-1);
+}
+
+/* ---------- 选中文字 ---------- */
+::selection {
+  background: color-mix(in srgb, var(--brand) 26%, transparent);
+  color: var(--ink);
+}
+
+/* ---------- 滚动条 ---------- */
+* { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: var(--r-pill);
+  border: 3px solid var(--paper);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
+
+/* ---------- 工具类 ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* 单行截断 */
+.ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 段落默认宽度上限，保证可读性 */
+.prose { max-width: 62ch; line-height: var(--lh-base); color: var(--ink-2); }
+.prose + .prose { margin-top: var(--s-3); }
+
+/* 键盘按键提示 */
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ink-2);
+  background: var(--paper-3);
+  border: 1px solid var(--line-2);
+  border-bottom-width: 2px;
+  border-radius: var(--r-1);
+}
+
+/* ---------- 减少动效：所有动画与过渡统一降级 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

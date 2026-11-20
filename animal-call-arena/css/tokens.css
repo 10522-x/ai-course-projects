@@ -1,0 +1,196 @@
+/* =========================================================================
+   tokens.css · 设计令牌
+   -------------------------------------------------------------------------
+   配色方向：野外声景 / 生物声学仪器。
+   用"冷调纸白 + 深松绿 + 铁锈橙"取代通用 AI 紫渐变。
+
+   配色纪律（本项目只有一套强调色，其余都是语义色）：
+     --brand-*  唯一的强调色。所有主操作、选中态、进度都只用它。
+     --ref-*    数据语义色，只用于"原声曲线"这一种含义，永远不做装饰。
+     --mic-*    数据语义色，只用于"你的曲线 / 录音中"这一种含义。
+     --grade-*  评级语义色，只出现在评分与徽章上。
+     --warn-* / --bad-*  状态语义色，只用于错误与警告。
+   除此之外不新增颜色。
+   ========================================================================= */
+
+:root {
+  /* ---------- 背景与前景（浅色） ---------- */
+  --paper: #EBF1E7;          /* 页面底：冷调纸白，带一点绿 */
+  --paper-2: #FFFFFF;        /* 卡片 / 浮层 */
+  --paper-3: #E2EADD;        /* 次级填充：输入框、凹槽、条形底 */
+  --paper-4: #D6E1D1;        /* 三级填充：hover 底、更深的凹槽 */
+  --ink: #0C1F17;            /* 主文字：深松绿近黑（不用纯黑） */
+  --ink-2: #2F453B;          /* 次级文字 */
+  --muted: #667C72;          /* 弱化文字、说明 */
+  --muted-2: #8B9C93;        /* 更弱的标注、坐标轴 */
+  --line: #D7E2D2;           /* 描边 */
+  --line-2: #C5D3BF;         /* 强描边 / 分隔 */
+
+  /* ---------- 强调色：松绿 ---------- */
+  --brand: #0E7A58;
+  --brand-deep: #0A5B41;
+  --brand-hi: #12986D;       /* hover / 高亮 */
+  --brand-soft: #DCEFE6;     /* 软底：选中卡片、徽章底 */
+  --brand-ring: rgba(14, 122, 88, .26);
+  --on-brand: #FFFFFF;
+
+  /* ---------- 数据语义色 ---------- */
+  --ref: #BC5717;            /* 原声曲线的颜色 */
+  --ref-soft: #F8ECE1;
+  --mic: #0E7A58;            /* 你的曲线的颜色（与强调色同源） */
+  --mic-soft: #DCEFE6;
+
+  /* ---------- 评级语义色 ---------- */
+  --grade-s: #9A6B10;
+  --grade-s-bg: #F7EDD6;
+  --grade-a: #0E7A58;
+  --grade-a-bg: #DCEFE6;
+  --grade-b: #2C6E7F;
+  --grade-b-bg: #DFEEF2;
+  --grade-c: #5C6B63;
+  --grade-c-bg: #E6ECE7;
+  --grade-d: #A93B2A;
+  --grade-d-bg: #F8E5E1;
+
+  /* ---------- 状态语义色 ---------- */
+  --warn: #8A5A0B;
+  --warn-bg: #FCF3DE;
+  --warn-line: #EBD9AE;
+  --bad: #A93B2A;
+  --bad-bg: #FBEAE7;
+  --bad-line: #EFCFC9;
+  --good: #0E7A58;
+  --good-bg: #DCEFE6;
+  --good-line: #BFE0D1;
+
+  /* ---------- 圆角（统一尺度，全站只用这五档） ---------- */
+  --r-1: 6px;                /* 最小：标签、进度条 */
+  --r-2: 10px;               /* 交互件：按钮、输入框、小卡 */
+  --r-3: 14px;               /* 容器：卡片、面板 */
+  --r-4: 20px;               /* 大容器：舞台、抽屉 */
+  --r-pill: 999px;           /* 状态胶囊、头像、开关 */
+  /* 规则：按钮/输入框=r-2，卡片/面板=r-3，舞台/抽屉=r-4，状态胶囊=r-pill。
+     不在此列表中的圆角一律不允许。 */
+
+  /* ---------- 阴影（染色到页面底色，不用纯黑投影） ---------- */
+  --sh-1: 0 1px 2px rgba(12, 31, 23, .05), 0 2px 8px rgba(12, 31, 23, .04);
+  --sh-2: 0 2px 4px rgba(12, 31, 23, .05), 0 10px 26px rgba(12, 31, 23, .07);
+  --sh-3: 0 18px 48px rgba(12, 31, 23, .16);
+  --sh-inset: inset 0 1px 0 rgba(255, 255, 255, .6);
+
+  /* ---------- 字体 ---------- */
+  --font-sans: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Source Han Sans SC",
+    "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  /* 等宽只用于"仪器读数"：分数、Hz、时长、编号 */
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono",
+    "Roboto Mono", Menlo, Consolas, "Courier New", monospace;
+
+  /* ---------- 字号（标题用 clamp 做流体缩放） ---------- */
+  --t-2xs: 10.5px;
+  --t-xs: 11.5px;
+  --t-sm: 12.5px;
+  --t-base: 14.5px;
+  --t-md: 16px;
+  --t-lg: 19px;
+  --t-xl: clamp(21px, 2.6vw, 25px);
+  --t-2xl: clamp(26px, 4vw, 36px);
+  --t-3xl: clamp(38px, 7vw, 62px);   /* 只给总分用 */
+
+  --lh-tight: 1.18;
+  --lh-snug: 1.4;
+  --lh-base: 1.72;
+
+  --tr-tight: -.02em;
+  --tr-wide: .09em;
+
+  /* ---------- 间距 ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 22px;
+  --s-6: 30px;
+  --s-7: 44px;
+  --s-8: 64px;
+
+  /* ---------- 版式尺寸 ---------- */
+  --shell: 1180px;           /* 内容最大宽度 */
+  --gutter: clamp(16px, 3.4vw, 30px);
+  --nav-h: 62px;
+
+  /* ---------- 动效 ---------- */
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --dur-1: .14s;
+  --dur-2: .26s;
+  --dur-3: .5s;
+
+  /* ---------- 层级（集中声明，禁止在组件里随手写 z-index） ---------- */
+  --z-base: 1;
+  --z-sticky: 20;
+  --z-nav: 40;
+  --z-tabbar: 40;
+  --z-drawer: 60;
+  --z-toast: 80;
+
+  color-scheme: light;
+}
+
+/* =========================================================================
+   深色主题
+   data-theme 由 <head> 里的内联脚本在首屏绘制前写好（读取本地偏好，否则跟随系统），
+   所以这里只需要一份深色令牌，不必再写 prefers-color-scheme 分支。
+   ========================================================================= */
+:root[data-theme="dark"] {
+  --paper: #0A1512;
+  --paper-2: #10201B;
+  --paper-3: #182C24;
+  --paper-4: #20392F;
+  --ink: #E9F1EC;
+  --ink-2: #B4C6BD;
+  --muted: #7E9289;
+  --muted-2: #647870;
+  --line: #1D322A;
+  --line-2: #2B463B;
+
+  --brand: #34C48D;
+  --brand-deep: #1E9C6C;
+  --brand-hi: #4BD79E;
+  --brand-soft: #143227;
+  --brand-ring: rgba(52, 196, 141, .3);
+  --on-brand: #04160F;
+
+  --ref: #E58542;
+  --ref-soft: #2E2015;
+  --mic: #34C48D;
+  --mic-soft: #143227;
+
+  --grade-s: #DFAE4B;
+  --grade-s-bg: #2C2410;
+  --grade-a: #34C48D;
+  --grade-a-bg: #143227;
+  --grade-b: #63B2C4;
+  --grade-b-bg: #132A30;
+  --grade-c: #93A79E;
+  --grade-c-bg: #1A2721;
+  --grade-d: #E4796A;
+  --grade-d-bg: #2E1915;
+
+  --warn: #DFB65E;
+  --warn-bg: #2A2210;
+  --warn-line: #4A3D1C;
+  --bad: #E4796A;
+  --bad-bg: #2C1815;
+  --bad-line: #4C2A24;
+  --good: #34C48D;
+  --good-bg: #143227;
+  --good-line: #23543F;
+
+  --sh-1: 0 1px 2px rgba(0, 0, 0, .3), 0 2px 8px rgba(0, 0, 0, .22);
+  --sh-2: 0 2px 4px rgba(0, 0, 0, .3), 0 10px 26px rgba(0, 0, 0, .34);
+  --sh-3: 0 18px 48px rgba(0, 0, 0, .5);
+  --sh-inset: inset 0 1px 0 rgba(255, 255, 255, .05);
+
+  color-scheme: dark;
+}

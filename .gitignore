@@ -1,0 +1,18 @@
+# Locally downloaded model weights and Python environments
+models/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# User data and generated work
+jobs/
+cache/
+logs/
+*.sqlite
+*.db
+*.mp4
+*.srt
+
+# WeChat private account settings
+project.private.config.json

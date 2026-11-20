@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>本地视频字幕</title>
+    <link rel="stylesheet" href="/styles.css?v=20261030-preview1" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <h1>视频字幕工作台</h1>
+        <div class="engine-status">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="health-label" role="status">连接中</span>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="control-panel">
+          <div class="section-heading">
+            <h2>视频</h2>
+          </div>
+
+          <label class="dropzone" id="dropzone" for="video-input">
+            <input id="video-input" type="file" accept="video/*" />
+            <span class="drop-icon" aria-hidden="true">+</span>
+            <strong id="file-label">选择或拖入视频</strong>
+            <small id="file-meta" hidden></small>
+          </label>
+
+          <div class="field keyword-field">
+            <label for="corrections">词语修正</label>
+            <input
+              id="corrections"
+              type="text"
+              maxlength="512"
+              placeholder="错词=>正确词"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="field">
+            <label for="speaker-count">说话人数</label>
+            <select id="speaker-count" disabled>
+              <option value="2" selected>2 人</option>
+            </select>
+          </div>
+
+          <button class="primary-button" id="process-button" type="button" disabled>
+            生成字幕
+          </button>
+
+          <div class="progress-area" id="progress-area" aria-live="polite" hidden>
+            <div class="progress-row">
+              <span id="progress-label">等待上传</span>
+              <span id="progress-value">0%</span>
+            </div>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+          </div>
+        </aside>
+
+        <section class="result-panel">
+          <div class="result-heading">
+            <h2>预览</h2>
+            <div class="result-actions" id="result-actions" hidden>
+              <a class="secondary-button" id="srt-link" download>下载 SRT</a>
+            </div>
+          </div>
+
+          <div class="video-frame" id="video-frame">
+            <div class="empty-state" id="empty-state">
+              <div class="empty-line" aria-hidden="true"></div>
+              <span>暂无视频</span>
+            </div>
+            <video id="result-video" controls playsinline hidden></video>
+          </div>
+
+          <div class="transcript-heading">
+            <h3>字幕</h3>
+            <span id="segment-count" hidden></span>
+          </div>
+          <div class="transcript" id="transcript">
+            <div class="transcript-empty">暂无字幕</div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js?v=20261030-preview1"></script>
+  </body>
+</html>

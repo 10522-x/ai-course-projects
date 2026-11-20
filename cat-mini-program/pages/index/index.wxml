@@ -1,0 +1,28 @@
+<view class="page {{background.className}} {{catVision ? 'cat-vision' : ''}}">
+  <view class="nav-bar">
+    <view class="settings-entry" bindtap="openSettings" hover-class="settings-entry-active" aria-label="设置">
+      <text class="settings-icon">⚙</text>
+    </view>
+    <text class="nav-title">{{currentToy.name}}</text>
+  </view>
+
+  <view class="scene" bindtap="interact">
+    <view class="cloud cloud-one"></view><view class="cloud cloud-two"></view>
+    <view class="paw-print paw-one"><i></i><i></i><i></i><i></i><b></b></view>
+    <view class="paw-print paw-two"><i></i><i></i><i></i><i></i><b></b></view>
+    <view class="toy {{currentToy.color}} {{escaping ? 'toy-escape' : ''}}" style="left: {{position.left}}%; top: {{position.top}}%; --toy-rotation: {{rotation}}deg;">
+      <view class="toy-shadow"></view>
+      <image class="toy-image" src="{{currentToy.image}}" mode="aspectFit" />
+    </view>
+    <view class="motion-line line-one"></view><view class="motion-line line-two"></view>
+  </view>
+
+  <view class="toy-dock">
+    <view wx:for="{{toys}}" wx:key="id" class="toy-option {{currentIndex === index ? 'selected selected-' + item.color : ''}}" data-index="{{index}}" bindtap="selectToy">
+      <view class="option-icon option-{{item.color}}">
+        <image class="option-image" src="{{item.image}}" mode="aspectFit" />
+      </view>
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+</view>

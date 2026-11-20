@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>语音流水线 · 场景工作台</title>
+    <link rel="stylesheet" href="/pipeline.css?v=6" />
+    <script src="/pipeline-lucide.min.js" defer></script>
+    <script src="/pipeline.js?v=6" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-icon"><i data-lucide="workflow" aria-hidden="true"></i></span>
+        <h1>语音流水线</h1>
+      </div>
+      <nav aria-label="工作台">
+        <span class="nav-current">场景工作台</span>
+        <a href="/">字幕页面<i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+      </nav>
+      <span class="connection" id="connection" role="status">连接中</span>
+    </header>
+
+    <main class="workbench">
+      <aside class="sidebar">
+        <section class="source-section">
+          <div class="section-title"><h2>视频源</h2><i data-lucide="film" aria-hidden="true"></i></div>
+          <label class="upload-zone" id="upload-zone" for="video-input">
+            <input type="file" id="video-input" accept=".mp4,.mov,.mkv,.avi,.webm,.m4v,video/*" />
+            <i data-lucide="upload" aria-hidden="true"></i>
+            <span id="file-name">选择或拖入视频</span>
+            <small id="file-size" hidden></small>
+          </label>
+          <div class="source-meta">
+            <span><i data-lucide="users-round" aria-hidden="true"></i>说话人数</span>
+            <strong>2 人</strong>
+          </div>
+          <button class="run-button" id="run-button" type="button" disabled>
+            <i data-lucide="play" aria-hidden="true"></i><span>运行流水线</span>
+          </button>
+          <p id="upload-error" class="error-text" role="alert" hidden></p>
+        </section>
+
+        <section class="inspector" aria-labelledby="inspector-title">
+          <div class="section-title"><h2 id="inspector-title">单元职责</h2><span id="unit-position">03 / 09</span></div>
+          <div class="inspector-heading">
+            <span class="inspector-icon" id="inspector-icon"></span>
+            <div><h3 id="unit-title"></h3><span class="model-name" id="unit-model"></span></div>
+          </div>
+          <p class="unit-description" id="unit-description"></p>
+          <dl class="unit-io">
+            <div><dt>输入</dt><dd id="unit-input"></dd></div>
+            <div><dt>输出</dt><dd id="unit-output"></dd></div>
+          </dl>
+          <div class="unit-state"><span>状态</span><strong id="unit-state">待运行</strong></div>
+        </section>
+
+        <div class="engine-footer"><i data-lucide="cpu" aria-hidden="true"></i><span id="engine-label">本地引擎</span><span>4 个模型</span></div>
+      </aside>
+
+      <section class="main-area">
+        <section class="scene-section" aria-labelledby="scene-title">
+          <div class="scene-toolbar">
+            <div class="scene-heading"><h2 id="scene-title">视频 → 双人字幕</h2><span class="task-status" id="task-status" role="status">待运行</span></div>
+            <div class="zoom-tools">
+              <button type="button" id="zoom-out" aria-label="缩小" data-tooltip="缩小"><i data-lucide="minus" aria-hidden="true"></i></button>
+              <output id="zoom-value" aria-label="画布缩放">100%</output>
+              <button type="button" id="zoom-in" aria-label="放大" data-tooltip="放大"><i data-lucide="plus" aria-hidden="true"></i></button>
+              <span class="tool-separator"></span>
+              <button type="button" id="fit-scene" aria-label="适应画布" data-tooltip="适应画布"><i data-lucide="scan" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <div class="scene-viewport" id="scene-viewport">
+            <div class="scene-sizer" id="scene-sizer">
+              <div class="scene-world" id="scene-world">
+                <svg class="connections" id="connections" aria-hidden="true"></svg>
+                <div id="nodes"></div>
+              </div>
+            </div>
+          </div>
+          <div class="scene-footer">
+            <div class="legend"><span><b class="legend-line"></b>数据流</span><span><b class="legend-model"></b>AI 模型</span></div>
+            <span id="runtime-message" aria-live="polite">8 个单元</span>
+          </div>
+        </section>
+
+        <section class="results-section" aria-labelledby="results-title">
+          <div class="results-heading">
+            <h2 id="results-title">输出</h2>
+            <span id="result-count" hidden></span>
+            <div class="downloads" id="downloads" hidden>
+              <a id="download-srt" download><i data-lucide="file-down" aria-hidden="true"></i>SRT</a>
+            </div>
+          </div>
+          <div class="results-grid">
+            <div class="video-output">
+              <div class="video-placeholder" id="video-placeholder"><i data-lucide="captions" aria-hidden="true"></i><span>等待字幕预览</span></div>
+              <video id="output-video" controls playsinline hidden></video>
+            </div>
+            <div class="transcript-panel">
+              <div class="clip-toolbar" id="clip-toolbar" hidden>
+                <div class="clip-selection-tools">
+                  <select id="speaker-filter" aria-label="按说话人筛选">
+                    <option value="all">所有说话人</option>
+                    <option value="1">说话人1</option>
+                    <option value="2">说话人2</option>
+                  </select>
+                  <button type="button" id="select-filtered">全选</button>
+                  <button type="button" id="clear-selection" aria-label="清除选择" data-tooltip="清除选择"><i data-lucide="x" aria-hidden="true"></i></button>
+                </div>
+                <div class="auto-edit-tools">
+                  <select id="male-speaker" aria-label="男生对应说话人">
+                    <option value="1">男生 · 说话人1</option>
+                    <option value="2">男生 · 说话人2</option>
+                  </select>
+                  <select id="female-speaker" aria-label="女生对应说话人">
+                    <option value="2">女生 · 说话人2</option>
+                    <option value="1">女生 · 说话人1</option>
+                  </select>
+                  <button class="auto-edit-button" type="button" id="auto-edit" disabled>
+                    <i data-lucide="sparkles" aria-hidden="true"></i><span>自动分析</span>
+                  </button>
+                  <button class="auto-edit-button auto-edit-render" type="button" id="auto-edit-render" disabled>
+                    <i data-lucide="scissors" aria-hidden="true"></i><span>自动剪辑</span>
+                  </button>
+                  <span id="auto-edit-summary" aria-live="polite"></span>
+                </div>
+                <div class="clip-edit-tools">
+                  <label>前 <input id="clip-head" type="number" min="0" max="5" step="0.1" value="0.2" aria-label="片段前余量，秒" /></label>
+                  <label>后 <input id="clip-tail" type="number" min="0" max="5" step="0.1" value="0.25" aria-label="片段后余量，秒" /></label>
+                  <span id="selected-count">已选 0</span>
+                  <button class="clip-button" type="button" id="make-clip" disabled><i data-lucide="scissors" aria-hidden="true"></i><span>生成剪辑</span></button>
+                </div>
+              </div>
+              <div class="transcript-output" id="transcript-output"><p class="transcript-placeholder">暂无字幕</p></div>
+            </div>
+          </div>
+          <section class="clip-output" id="clip-output" aria-labelledby="clip-output-title" hidden>
+            <div class="clip-output-heading">
+              <h3 id="clip-output-title">剪辑预览</h3>
+              <div class="downloads">
+                <a id="download-clip" download><i data-lucide="video" aria-hidden="true"></i>MP4</a>
+                <a id="download-clip-srt" download><i data-lucide="file-down" aria-hidden="true"></i>SRT</a>
+              </div>
+            </div>
+            <video id="clip-video" controls playsinline></video>
+          </section>
+          <p id="clip-error" class="error-text" role="alert" hidden></p>
+          <p id="process-error" class="error-text" role="alert" hidden></p>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

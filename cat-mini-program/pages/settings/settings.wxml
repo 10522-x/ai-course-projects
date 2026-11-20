@@ -1,0 +1,24 @@
+<view class="settings-page">
+  <view class="settings-head"><view class="back" bindtap="onBack">‹</view><text>设置</text><view class="head-space"></view></view>
+  <scroll-view scroll-y class="settings-scroll">
+    <view class="section-title">基础设置</view>
+    <view class="panel">
+      <view class="row speed-row"><view class="row-label"><text class="row-icon">♧</text><text>运动速度</text></view><text class="value">{{speed === 1 ? '较慢' : speed === 3 ? '较快' : '中等'}}</text></view>
+      <slider min="0" max="2" value="{{speed - 1}}" activeColor="#2da99d" backgroundColor="#e6eaec" block-color="#2da99d" bindchange="changeSpeed"></slider>
+      <view class="divider"></view>
+      <view class="row"><view class="row-label"><text class="row-icon">♬</text><text>音效</text></view><switch checked="{{sound}}" color="#2da99d" bindchange="toggleSound"></switch></view>
+      <view class="divider"></view>
+      <view class="row" bindtap="chooseBackground"><view class="row-label"><text class="row-icon">▧</text><text>背景</text></view><view class="row-right"><text>{{backgroundName}}</text><text class="chevron">›</text></view></view>
+    </view>
+    <view class="section-title">猫咪模式</view>
+    <view class="panel">
+      <view class="row"><view class="row-label"><text class="row-icon">♧</text><text>猫咪视觉</text></view><text class="vision-state">已开启</text></view>
+      <view class="divider"></view>
+      <view class="row" bindtap="chooseMode"><view class="row-label"><text class="row-icon">♙</text><text>当前模式</text></view><view class="row-right"><text>{{modeName}}</text><text class="chevron">›</text></view></view>
+    </view>
+    <view class="section-title">互动玩法</view>
+    <view class="panel"><navigator class="tutorial-row" url="/pages/tutorial/tutorial"><view class="row-label"><text class="row-icon">◎</text><text>怎么玩</text></view><text class="chevron">›</text></navigator></view>
+    <view class="section-title">关于我们</view>
+    <view class="panel"><view class="row"><view class="row-label"><text class="row-icon">ⓘ</text><text>版本</text></view><text class="value">版本 1.0.0</text></view></view>
+  </scroll-view>
+</view>

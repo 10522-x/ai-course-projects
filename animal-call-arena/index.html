@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>动物模仿大赛 · Animal Voice Arena</title>
+<meta name="description" content="听动物的真实野外录音，对着麦克风模仿它，系统从音准、节奏、走向、稳定度四个维度打分。零依赖、零后端的纯静态网页应用。" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#EBF1E7" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0A1512" media="(prefers-color-scheme: dark)" />
+
+<!-- 主题必须在首屏绘制前定下来，否则会闪一下浅色再变深色 -->
+<script>
+(function () {
+  var t = 'light';
+  try {
+    var raw = localStorage.getItem('ava.v2');
+    var saved = raw ? JSON.parse(raw).theme : null;
+    if (saved === 'dark' || saved === 'light') t = saved;
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
+  } catch (e) { /* 存储不可用就跟随系统 */ }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/components.css" />
+<link rel="stylesheet" href="css/views.css" />
+</head>
+<body>
+
+<!-- ICONS:START -->
+<!-- 图标 sprite：由 tools/build_icons.js 生成，不要手改。
+     图标来自 Lucide（MIT，24 格网格、描边风格）。开发期生成、运行时内联，
+     页面不产生额外请求，也不依赖 CDN。
+     要加/换图标：改本脚本顶部的映射，然后跑 node tools/build_icons.js -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 3a3.1 3.1 0 0 1 3.1 3.1v5.4a3.1 3.1 0 1 1-6.2 0V6.1A3.1 3.1 0 0 1 12 3z"/><path d="M6.2 11.4a5.8 5.8 0 0 0 11.6 0"/><path d="M12 17.2v3.4"/><path d="M8.8 20.6h6.4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" /></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" /></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24"><path d="M10 8h.01" /><path d="M12 12h.01" /><path d="M14 8h.01" /><path d="M16 12h.01" /><path d="M18 8h.01" /><path d="M6 8h.01" /><path d="M7 16h10" /><path d="M8 12h.01" /><rect width="20" height="16" x="2" y="4" rx="2" /></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 5h.01" /><path d="M3 12h.01" /><path d="M3 19h.01" /><path d="M8 5h13" /><path d="M8 12h13" /><path d="M8 19h13" /></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><rect x="9" y="2" width="6" height="13" rx="3" /></symbol>
+  <symbol id="i-mic-off" viewBox="0 0 24 24"><path d="M12 19v3" /><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33" /><path d="M16.95 16.95A7 7 0 0 1 5 12v-2" /><path d="M18.89 13.23A7 7 0 0 0 19 12v-2" /><path d="m2 2 20 20" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12" /></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" /><path d="m14.5 12.5 2-2" /><path d="m11.5 9.5 2-2" /><path d="m8.5 6.5 2-2" /><path d="m17.5 15.5 2-2" /></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><rect x="9" y="9" width="6" height="6" rx="1" /></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" /></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /><path d="M4 22h16" /><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></symbol>
+  <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2" /></symbol>
+</svg>
+<!-- ICONS:END -->
+
+<div id="navSentinel" aria-hidden="true"></div>
+
+<!-- ============================ 顶栏 ============================ -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#/arena">
+      <span class="brand-mark"><svg class="ico" aria-hidden="true"><use href="#i-logo"/></svg></span>
+      <span>
+        <span class="brand-name">动物模仿大赛</span>
+        <span class="brand-sub">Animal Voice Arena</span>
+      </span>
+    </a>
+    <nav class="tabs" id="navTabs" role="tablist" aria-label="主导航"></nav>
+    <div class="nav-right" id="navRight"></div>
+  </div>
+</header>
+
+<!-- ============================ 主体 ============================ -->
+<main class="shell" id="shell">
+  <div class="banner" id="appBanner" role="alert"></div>
+
+  <section class="view" id="view-arena" role="tabpanel" aria-labelledby="tab-arena"></section>
+  <section class="view" id="view-codex" role="tabpanel" aria-labelledby="tab-codex"></section>
+  <section class="view" id="view-records" role="tabpanel" aria-labelledby="tab-records"></section>
+  <section class="view" id="view-about" role="tabpanel" aria-labelledby="tab-about"></section>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <p>全部音频来自开源声库 <a href="https://xeno-canto.org" target="_blank" rel="noopener">xeno-canto.org</a>，
+        遵循各自的 Creative Commons 许可。每条录音的录音师、许可证和原始链接都保留在对应动物的署名行里，
+        也集中在 <code>assets/credits.json</code>。</p>
+        <p>其中部分录音是「非商业使用」许可，个人练习、学习与非商业演示没有限制；如需商用请按对应许可证署名或更换素材。</p>
+      </div>
+      <div class="foot-meta">
+        <span>前端零依赖 · 零构建 · 纯静态</span>
+        <span>FFT / MPM / DTW 全部手写实现</span>
+        <span>成绩只保存在本机浏览器</span>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>动物模仿大赛 · 声音相似度评分</span>
+      <span>麦克风需要安全上下文，本地预览请用 127.0.0.1</span>
+    </div>
+  </footer>
+</main>
+
+<!-- ============================ 移动端标签栏 ============================ -->
+<nav class="tabbar" id="tabbar" aria-label="主导航"></nav>
+
+<noscript>
+  <div class="shell"><div class="banner show">这个应用需要 JavaScript 才能运行：音频解码、音高检测与打分都在浏览器里完成。</div></div>
+</noscript>
+
+<!-- =========================================================================
+     脚本按依赖顺序加载。采用经典多文件 + 全局命名空间 AVA 而不是 ES module，
+     这样源码即产物（零构建），测试工具也能直接把这份代码拼起来跑。
+     source.js 是数据源抽象：有后端时走 API，没有时自动退回静态文件。
+     ========================================================================= -->
+<script src="js/core/signal.js"></script>
+<script src="js/core/pitch.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/score.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/source.js"></script>
+<script src="js/ui/dom.js"></script>
+<script src="js/ui/chart.js"></script>
+<script src="js/ui/share.js"></script>
+<script src="js/ui/views/arena.js"></script>
+<script src="js/ui/views/codex.js"></script>
+<script src="js/ui/views/records.js"></script>
+<script src="js/ui/views/about.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
