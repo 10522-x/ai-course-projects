@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#edf0e8" />
+    <title>瑣儿的样子 · 三版对照</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main class="studio">
+      <canvas id="studio-canvas" aria-label="瑣儿三版模型的三维对照"></canvas>
+      <header class="studio-header">
+        <a class="studio-icon" href="/" aria-label="回到小屋" title="回到小屋"
+          ><i data-lucide="arrow-left"></i
+        ></a>
+        <div>
+          <p class="studio-eyebrow">小小生活 / 角色</p>
+          <h1>瑣儿的样子</h1>
+        </div>
+      </header>
+      <div class="studio-tools">
+        <div class="segmented" role="group" aria-label="服装">
+          <button data-outfit="false" aria-pressed="true">素体</button>
+          <button data-outfit="true" aria-pressed="false">穿衣</button>
+        </div>
+        <div class="segmented angles" role="group" aria-label="观察角度">
+          <button data-angle="front" aria-pressed="true">正面</button>
+          <button data-angle="side" aria-pressed="false">侧面</button>
+          <button data-angle="back" aria-pressed="false">背面</button>
+        </div>
+      </div>
+      <div id="model-labels" class="model-labels" aria-hidden="true"></div>
+      <footer class="studio-footer">
+        <div
+          class="design-picker"
+          role="radiogroup"
+          aria-label="角色版本"
+        ></div>
+        <button id="apply-design" class="studio-apply">
+          带回小屋<i data-lucide="arrow-right"></i>
+        </button>
+        <span id="save-status" role="status"></span>
+      </footer>
+      <p id="studio-error" hidden>模型暂时没有加载成功，请刷新后再试。</p>
+    </main>
+    <script type="module" src="/src/model-studio.js"></script>
+  </body>
+</html>

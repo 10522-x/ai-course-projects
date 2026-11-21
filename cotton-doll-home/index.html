@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e5ece5" />
+    <meta
+      name="description"
+      content="瑣儿和自己的小小玩偶屋，一起度过柔软的日常。"
+    />
+    <title>瑣儿的小小生活</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="world" aria-label="瑣儿的互动三维玩偶屋"></canvas>
+      <header class="heading">
+        <div class="brand-mark"><i data-lucide="house"></i></div>
+        <div>
+          <h1>瑣儿的小小生活<span class="title-flower">✳</span></h1>
+          <p class="byline">小小的家，软软的日常</p>
+        </div>
+      </header>
+      <nav class="toolbar" aria-label="小屋控制">
+        <button
+          id="character-design"
+          class="icon-button"
+          aria-label="瑣儿的样子"
+          data-tooltip="瑣儿的样子"
+        >
+          <i data-lucide="user-round"></i>
+        </button>
+        <label class="auto-control" data-tooltip="让瑣儿自己安排生活">
+          <span>自主生活</span
+          ><input
+            id="autonomy"
+            type="checkbox"
+            role="switch"
+            checked
+            aria-label="自主生活"
+          /><span class="switch-track"></span>
+        </label>
+        <span class="toolbar-divider"></span>
+        <button
+          id="pause"
+          class="icon-button"
+          aria-label="暂停"
+          data-tooltip="暂停"
+        >
+          <i data-lucide="pause"></i>
+        </button>
+        <button
+          id="reset"
+          class="icon-button"
+          aria-label="重置视角"
+          data-tooltip="重置视角"
+        >
+          <i data-lucide="scan"></i>
+        </button>
+      </nav>
+      <section class="environment-controls" aria-label="小屋氛围">
+        <label class="background-control" data-tooltip="背景颜色">
+          <i data-lucide="palette"></i>
+          <input id="background-color" type="color" value="#e5ece5" aria-label="背景颜色" />
+        </label>
+        <label for="time-of-day" class="time-icon" data-tooltip="昼夜时间">
+          <i data-lucide="sun-moon"></i>
+        </label>
+        <input id="time-of-day" type="range" min="0" max="24" step="0.25" value="10" aria-label="昼夜时间" />
+        <output id="time-display" for="time-of-day">10:00</output>
+      </section>
+      <aside class="status" aria-live="polite">
+        <span class="status-dot"></span
+        ><span id="status-text">瑣儿刚刚醒来</span>
+        <span id="paused-badge" hidden>已暂停</span>
+      </aside>
+      <div id="furniture-label" class="furniture-label" role="tooltip" hidden></div>
+      <div id="tool-label" class="furniture-label tool-label" role="tooltip" hidden></div>
+      <footer class="bottom-bar">
+        <div class="home-note">
+          <span class="tiny-flower">✳</span><span>在家，做喜欢的小事</span>
+        </div>
+        <nav id="activities" class="activities" aria-label="安排活动"></nav>
+        <div class="view-controls">
+          <button
+            id="zoom-in"
+            class="icon-button"
+            aria-label="拉近视角"
+            data-tooltip="拉近"
+          >
+            <i data-lucide="plus"></i>
+          </button>
+          <button
+            id="zoom-out"
+            class="icon-button"
+            aria-label="拉远视角"
+            data-tooltip="拉远"
+          >
+            <i data-lucide="minus"></i>
+          </button>
+        </div>
+      </footer>
+      <div id="loading" class="loading">
+        <span class="loading-flower">✳</span>
+        <p>给瑣儿的小屋开盏灯…</p>
+      </div>
+      <div id="error" class="error" hidden>
+        <h2>小屋还没有亮起来</h2>
+        <p>请使用支持 WebGL 的浏览器，并开启硬件加速。</p>
+        <button onclick="location.reload()">再试一次</button>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

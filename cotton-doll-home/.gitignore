@@ -1,0 +1,6 @@
+node_modules/
+dist/
+test-results/
+.hsk/
+*.log
+.DS_Store
